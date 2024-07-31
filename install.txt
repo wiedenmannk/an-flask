@@ -1,5 +1,1 @@
-python3 -m venv venv
-sudo apt install python3.10-venv
-
-source venv/bin/activate
 pip install Flask

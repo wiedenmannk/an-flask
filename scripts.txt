@@ -1,2 +1,7 @@
 python3 app.py
 python3 server.py
+
+chmod 775 ps
+
+# run ps in Ubuntu
+./ps
