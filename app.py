@@ -1,6 +1,9 @@
 import random
 import logging
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import pikepdf
+from lxml import etree
+
 
 app = Flask(__name__)
 
@@ -25,7 +28,7 @@ def get_data():
     
     return jsonify(data)
 
-@app.route('/api/product/<int:product_id>', methods=['GET'])
+@app.route('/api/products/<int:product_id>', methods=['GET'])
 def get_product(product_id):
     products = {
         1: { 'id': 1, 'name': 'Product 1', 'description': 'Description of Product 1', 'serial': generate_random_number() },
@@ -43,6 +46,33 @@ def get_product(product_id):
         # Logge den API-Call und den Fehler
         app.logger.info('GET /api/product/%d - Response: %s', product_id, error_message)
         return jsonify(error_message), 404
+
+## PDF Generator
+@app.route('/api/generate-zugferd', methods=['POST'])
+def generate_zugferd_pdf():
+    # Überprüfe, ob der Content-Type `application/json` ist
+    if request.content_type != 'application/json':
+        return jsonify({"error": "Unsupported Media Type"}), 415
+
+    # Versuche, die JSON-Daten zu extrahieren
+    try:
+        data = request.json
+        app.logger.info('data: %s', data)
+        pdf_path = data.get('pdf_path')
+        xml_content = data.get('xml_content')
+
+        # Überprüfe, ob die erforderlichen Daten vorhanden sind
+        if not pdf_path or not xml_content:
+            return jsonify({"error": "Missing pdf_path or xml_content"}), 400
+        
+        pdf = pikepdf.Pdf.open(pdf_path)
+        pdf.attachments['ZUGFeRD-invoice.xml'] = pikepdf.EmbeddedFile(xml_content.encode(), name='ZUGFeRD-invoice.xml')
+        output_path = pdf_path.replace(".pdf", "_zugferd.pdf")
+        pdf.save(output_path, pdf_a_mode=pikepdf.PdfAFormat.PDF_A_3B)
+        return jsonify({"message": "ZUGFeRD PDF created successfully", "path": output_path}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
