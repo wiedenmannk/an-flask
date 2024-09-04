@@ -3,6 +3,7 @@ import logging
 from flask import Flask, jsonify, request
 import pikepdf
 from lxml import etree
+from routes.routes import bp as zugferd_route  # Korrekte Importstruktur
 
 app = Flask(__name__)
 
@@ -42,32 +43,8 @@ def get_product(product_id):
         app.logger.info('GET /api/product/%d - Response: %s', product_id, error_message)
         return jsonify(error_message), 404
 
-@app.route('/api/generate-zugferd', methods=['POST'])
-def generate_zugferd_pdf():
-    if request.content_type != 'application/json':
-        return jsonify({"error": "Unsupported Media Type"}), 415
-
-    try:
-        data = request.json
-        app.logger.info('POST /api/generate-zugferd - Request Data: %s', data)
-
-        pdf_path = data.get('pdf_path')
-        xml_content = data.get('xml_content')
-
-        if not pdf_path or not xml_content:
-            return jsonify({"error": "Missing pdf_path or xml_content"}), 400
-        
-        pdf = pikepdf.Pdf.open(pdf_path)
-        pdf.attachments['ZUGFeRD-invoice.xml'] = pikepdf.EmbeddedFile(xml_content.encode(), name='ZUGFeRD-invoice.xml')
-        output_path = pdf_path.replace(".pdf", "_zugferd.pdf")
-        pdf.save(output_path, pdf_a_mode=pikepdf.PdfAFormat.PDF_A_3B)
-        
-        app.logger.info('POST /api/generate-zugferd - Response: %s', {"message": "ZUGFeRD PDF created successfully", "path": output_path})
-        return jsonify({"message": "ZUGFeRD PDF created successfully", "path": output_path}), 200
-
-    except Exception as e:
-        app.logger.error('POST /api/generate-zugferd - Error: %s', str(e))
-        return jsonify({"error": str(e)}), 500
+# Registriere die Routen
+app.register_blueprint(zugferd_route)  # Hier registrierst du den Blueprint direkt
 
 if __name__ == '__main__':
     app.run(debug=True)
