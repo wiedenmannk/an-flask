@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:rsm="urn:ferd-org:invoice:1.0" xmlns:ram="urn:ferd-org:invoice:1.0">
+  <rsm:Header>
+    <ram:ID>12345</ram:ID>
+    <ram:IssueDateTime>
+      <ram:DateTimeString format="102">20240901</ram:DateTimeString>
+    </ram:IssueDateTime>
+  </rsm:Header>
+  <rsm:SupplyChainTradeTransaction>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:ID>123456</ram:ID>
+      </ram:AssociatedDocumentLineDocument>
+    </ram:IncludedSupplyChainTradeLineItem>
+  </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>
