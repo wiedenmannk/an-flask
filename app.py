@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Konfiguriere das Logging nur für die Konsole
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler()]
 )
