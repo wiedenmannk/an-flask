@@ -6,26 +6,31 @@ class ZugferdXmlGenerator:
     def __init__(self):
         pass
 
-    def generate_xml_from_json(self, json_data: dict, xml_filepath: str) -> None:
+    def generate_xml_from_json(self, json_data: dict, xml_filepath: str) -> str:
         """
-        Generiert ein ZUGFeRD-taugliches XML aus JSON-Daten und speichert es auf der Festplatte.
+        Generiert ein ZUGFeRD-taugliches XML aus JSON-Daten, gibt den XML-String zurück und speichert es auf der Festplatte.
         """
         try:
-            # Erstelle das XML-Dokument basierend auf den JSON-Daten
             root = ET.Element("Invoice")
-
-            # Beispielhafte Umwandlung von JSON zu XML, dies kann an die ZUGFeRD-Spezifikationen angepasst werden
             for key, value in json_data.items():
                 child = ET.SubElement(root, key)
                 child.text = str(value)
             
+            # Generiere den XML-String
+            xml_string = ET.tostring(root, encoding='utf-8', method='xml').decode('utf-8')
+            print(f"Generated XML String:\n{xml_string}")
+
             # Speichere das XML als Datei
-            tree = ET.ElementTree(root)
-            tree.write(xml_filepath, encoding='utf-8', xml_declaration=True)
+            with open(xml_filepath, 'w', encoding='utf-8') as f:
+                f.write(xml_string)
+            
             print(f"ZUGFeRD XML-Datei erfolgreich gespeichert: {xml_filepath}")
+            return xml_string
 
         except Exception as e:
             print(f"Fehler beim Generieren des ZUGFeRD-XML: {e}")
+            return ""
+
 
     def read_xml(self, xml_filepath: str) -> ET.Element:
         """

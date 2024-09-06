@@ -1,0 +1,50 @@
+{
+	"files.associations": {
+		"**/*.html": "django-html",
+		"**/templates/**/*.html": "django-html",
+		"**/templates/**/*": "django-txt",
+		"**/jinja2/**/*.html": "django-html",
+		"**/jinja2/**/*": "django-txt"
+	},
+	"editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,	
+	"prettier.enable": true,
+	"editor.formatOnSave": true,
+	"[html]": {
+		"editor.defaultFormatter": "batisteo.vscode-django",
+		"editor.formatOnSave": true
+	},
+	"[javascript]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": null
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features",
+		"editor.formatOnSave": true
+	},
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[less]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.python",
+		"editor.formatOnSave": true,
+	}
+}
