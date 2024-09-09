@@ -11,6 +11,7 @@
     "editor.detectIndentation": false,	
 	"prettier.enable": true,
 	"editor.formatOnSave": true,
+    "python.languageServer": "Pylance",
 	"[html]": {
 		"editor.defaultFormatter": "batisteo.vscode-django",
 		"editor.formatOnSave": true
@@ -44,7 +45,6 @@
 		"editor.formatOnSave": true
 	},
 	"[python]": {
-		"editor.defaultFormatter": "ms-python.python",
-		"editor.formatOnSave": true,
-	}
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true	}
 }
