@@ -2,6 +2,7 @@ import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+
 class ZugferdXmlGenerator:
     def __init__(self):
         pass
@@ -15,22 +16,23 @@ class ZugferdXmlGenerator:
             for key, value in json_data.items():
                 child = ET.SubElement(root, key)
                 child.text = str(value)
-            
+
             # Generiere den XML-String
-            xml_string = ET.tostring(root, encoding='utf-8', method='xml').decode('utf-8')
+            xml_string = ET.tostring(root, encoding="utf-8", method="xml").decode(
+                "utf-8"
+            )
             print(f"Generated XML String:\n{xml_string}")
 
             # Speichere das XML als Datei
-            with open(xml_filepath, 'w', encoding='utf-8') as f:
+            with open(xml_filepath, "w", encoding="utf-8") as f:
                 f.write(xml_string)
-            
+
             print(f"ZUGFeRD XML-Datei erfolgreich gespeichert: {xml_filepath}")
             return xml_string
 
         except Exception as e:
             print(f"Fehler beim Generieren des ZUGFeRD-XML: {e}")
             return ""
-
 
     def read_xml(self, xml_filepath: str) -> ET.Element:
         """
@@ -51,11 +53,12 @@ class ZugferdXmlGenerator:
         """
         try:
             tree = ET.ElementTree(xml_element)
-            tree.write(xml_filepath, encoding='utf-8', xml_declaration=True)
+            tree.write(xml_filepath, encoding="utf-8", xml_declaration=True)
             print(f"XML-Datei erfolgreich geschrieben: {xml_filepath}")
 
         except Exception as e:
             print(f"Fehler beim Schreiben der XML-Datei: {e}")
+
 
 # Beispielnutzung der Klasse
 if __name__ == "__main__":
@@ -65,7 +68,7 @@ if __name__ == "__main__":
     json_data = {
         "InvoiceNumber": "12345",
         "InvoiceDate": "2024-09-06",
-        "Amount": "100.00"
+        "Amount": "100.00",
     }
     xml_filepath = "zugferd.xml"
 

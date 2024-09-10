@@ -5,6 +5,17 @@ from typing import Dict, Any
 from flask import Blueprint, jsonify, request
 import fitz  # PyMuPDF
 import psutil
+import sys
+import os
+from pathlib import Path
+
+
+# Füge das Projekt-Root-Verzeichnis zu sys.path hinzu
+root_dir = Path(__file__).parent.parent
+sys.path.append(str(root_dir))
+
+from service.pdf_maker import PDFMaker
+from service.zugferd_xml_generator import ZugferdXmlGenerator
 
 bp = Blueprint("zugferd", __name__)
 
@@ -24,37 +35,62 @@ def generate_zugferd_pdf() -> Any:
         logger.info("get Data")
         data: Dict[str, str] = request.json
 
+        # Pfade definieren
+        # pdf_path = root_dir / "files" / "test.pdf"
+        xml_filepath = root_dir / "generated" / "zugferd_api.xml"
+        output_pdf_path = root_dir / "generated" / "zugferd_api.pdf"
+        pdf_file = root_dir / "generated" / "raw_invoice.pdf"
+
+        print(f"XML Path: {xml_filepath}")
+        print(f"Output PDF Path: {output_pdf_path}")
+        print(f"Raw pdf file: {pdf_file}")
+
+        # Stelle sicher, dass der "generated" Ordner existiert
+        os.makedirs(root_dir / "generated", exist_ok=True)
+
         pdf_base64 = data.get("pdf_content")
-        xml_content = data.get("xml_content")
+        invoice_json = data.get("invoice")
 
         logger.info("data received")
-        if not pdf_base64 or not xml_content:
-            logger.error("Missing pdf_content or xml_content")
-            return jsonify({"error": "Missing pdf_content or xml_content"}), 400
-
-        logger.info("try to create data")
-        pdf_data = base64.b64decode(pdf_base64)
-        pdf_document = fitz.open(stream=pdf_data, filetype="pdf")
+        if not pdf_base64 or not invoice_json:
+            errMsg = "Missing pdf_content or invoice json data"
+            logger.error(errMsg)
+            return jsonify({"error": errMsg}), 400
 
         logger.info("received pdf document")
-        logger.info("try to add XML content to PDF")
+        logger.info("try to add XML content")
 
         try:
-            xref = pdf_document._embfile_add(
-                name="ZUGFeRD-invoice.xml",
-                buffer_=io.BytesIO(xml_content.encode()),
-                filename="ZUGFeRD-invoice.xml",
-            )
-            logger.info("XML added to PDF, xref: %d", xref)
-        except Exception as e:
-            logger.error("Failed to add XML content to PDF: %s", str(e))
-            pdf_document.close()
-            return jsonify({"error": "Failed to add XML content"}), 500
+            # ZUGFeRD XML-Generator erstellen und XML generieren
+            xml_generator = ZugferdXmlGenerator()
 
-        output_path = "output_zugferd.pdf"
-        logger.info("Saving PDF to %s", output_path)
-        pdf_document.save(output_path, garbage=4, deflate=True)
-        pdf_document.close()
+            # Generiere XML und zeige als String
+            xml_string = xml_generator.generate_xml_from_json(
+                invoice_json, xml_filepath
+            )
+            logger.info(f"Generated XML String:\n{xml_string}")
+
+        except Exception as e:
+            logger.error("Failed to create XML File: %s", str(e))
+            return jsonify({"error": "Failed to create XML File"}), 500
+
+        try:
+            logger.info("save base64 to pdf")
+            # PDFMaker erstellen und XML an PDF anhängen
+            pdf_maker = PDFMaker()
+            pdf = pdf_maker.process_base64_pdf(pdf_base64)
+            pdf.save(pdf_file)
+            if pdf is not None:
+                pdf_maker.attach_xml(
+                    str(xml_filepath), "zugferd.xml", str(output_pdf_path), pdf
+                )
+                logger.info(f"PDF with XML attached saved to: {output_pdf_path}")
+
+        except Exception as e:
+            errMsg = "Failed to save pdf"
+            pdf.close()
+            logger.error("{errMsg}: %s", str(e))
+            return jsonify({"error": errMsg}), 500
 
         # Überprüfe den Speicherverbrauch
         process = psutil.Process()
@@ -63,10 +99,10 @@ def generate_zugferd_pdf() -> Any:
             process.memory_info().rss / (1024 * 1024),
         )
 
-        logger.info("ZUGFeRD PDF created successfully: %s", output_path)
+        logger.info("ZUGFeRD PDF created successfully: %s", output_pdf_path)
         return (
             jsonify(
-                {"message": "ZUGFeRD PDF created successfully", "path": output_path}
+                {"message": "ZUGFeRD PDF created successfully", "path": output_pdf_path}
             ),
             200,
         )
