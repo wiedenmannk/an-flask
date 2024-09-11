@@ -15,10 +15,11 @@ def test_pdf_processing():
     print(f"Root directory: {root_dir}")
 
     # Pfade definieren
+    output_path = "output"
     pdf_path = root_dir / "files" / "test.pdf"
     base64_pdf_path = root_dir / "files" / "pdf_base64.txt"
-    xml_filepath = root_dir / "generated" / "zugferd.xml"
-    output_pdf_path = root_dir / "generated" / "output_with_xml.pdf"
+    xml_filepath = root_dir / output_path / "zugferd.xml"
+    output_pdf_path = root_dir / output_path / "output_with_xml.pdf"
 
     print(f"PDF Path: {pdf_path}")
     print(f"Base64 PDF Path: {base64_pdf_path}")
@@ -30,17 +31,22 @@ def test_pdf_processing():
 
     # Beispielhafte JSON-Daten für ZUGFeRD
     json_data = {
-        "InvoiceNumber": "12345",
-        "InvoiceDate": "2024-09-06",
-        "Amount": "100.00",
+        "name": "Klaus",
+        "lastName": "Wiedenmann",
+        "summary": "10000",
+        "bill": {"no": "1", "date": "2024-09-01"},
     }
 
     # ZUGFeRD XML-Generator erstellen und XML generieren
     xml_generator = ZugferdXmlGenerator()
 
     # Generiere XML und zeige als String
-    xml_string = xml_generator.generate_xml_from_json(json_data, xml_filepath)
+    xml_string = xml_generator.generate_xml_from_json(json_data)
     print(f"Generated XML String:\n{xml_string}")
+
+    # Schreibe XML in eine Datei
+    xml_generator.write_xml(xml_string, xml_filepath)
+    print(f"XML written to: {xml_filepath}")
 
     # Base64-kodiertes PDF aus der Datei lesen
     with open(base64_pdf_path, "r") as file:

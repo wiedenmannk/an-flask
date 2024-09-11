@@ -36,17 +36,18 @@ def generate_zugferd_pdf() -> Any:
         data: Dict[str, str] = request.json
 
         # Pfade definieren
+        output_dir = "output"
         # pdf_path = root_dir / "files" / "test.pdf"
-        xml_filepath = root_dir / "generated" / "zugferd_api.xml"
-        output_pdf_path = root_dir / "generated" / "zugferd_api.pdf"
-        pdf_file = root_dir / "generated" / "raw_invoice.pdf"
+        xml_filepath = root_dir / output_dir / "zugferd_api.xml"
+        output_pdf_path = root_dir / output_dir / "zugferd_api.pdf"
+        pdf_file = root_dir / output_dir / "raw_invoice.pdf"
 
         print(f"XML Path: {xml_filepath}")
         print(f"Output PDF Path: {output_pdf_path}")
         print(f"Raw pdf file: {pdf_file}")
 
         # Stelle sicher, dass der "generated" Ordner existiert
-        os.makedirs(root_dir / "generated", exist_ok=True)
+        os.makedirs(root_dir / output_dir, exist_ok=True)
 
         pdf_base64 = data.get("pdf_content")
         invoice_json = data.get("invoice")
