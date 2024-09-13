@@ -66,10 +66,11 @@ def generate_zugferd_pdf() -> Any:
             xml_generator = ZugferdXmlGenerator()
 
             # Generiere XML und zeige als String
-            xml_string = xml_generator.generate_xml_from_json(
-                invoice_json, xml_filepath
-            )
+            xml_string = xml_generator.generate_xml_from_json(invoice_json)
             logger.info(f"Generated XML String:\n{xml_string}")
+
+            xml_generator.write_xml(xml_string, xml_filepath)
+            logger.info(f"Generated XML file {xml_filepath}")
 
         except Exception as e:
             logger.error("Failed to create XML File: %s", str(e))
@@ -103,7 +104,10 @@ def generate_zugferd_pdf() -> Any:
         logger.info("ZUGFeRD PDF created successfully: %s", output_pdf_path)
         return (
             jsonify(
-                {"message": "ZUGFeRD PDF created successfully", "path": output_pdf_path}
+                {
+                    "message": "ZUGFeRD PDF created successfully",
+                    "path": str(output_pdf_path),
+                }
             ),
             200,
         )
