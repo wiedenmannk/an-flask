@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:rsm="urn:ferd:CrossIndustryInvoice:invoice:1p0">
+    <rsm:ExchangedDocumentContext>
+        <ram:GuidelineSpecifiedDocumentContextParameter>
+            <ram:ID>ZUGFeRD Comfort</ram:ID>
+        </ram:GuidelineSpecifiedDocumentContextParameter>
+    </rsm:ExchangedDocumentContext>
+
+    <rsm:ExchangedDocument>
+        <ram:ID>TeamLK-202405</ram:ID>
+        <ram:TypeCode>380</ram:TypeCode>
+        <ram:IssueDateTime>
+            <udt:DateTimeString format="102">20240617</udt:DateTimeString>
+        </ram:IssueDateTime>
+    </rsm:ExchangedDocument>
+
+    <rsm:SupplyChainTradeTransaction>
+        <ram:ApplicableHeaderTradeAgreement>
+            <!-- Verkäuferinformationen -->
+            <ram:SellerTradeParty>
+                <ram:Name>SelbstBoss</ram:Name>
+                <ram:PostalTradeAddress>
+                    <ram:PostcodeCode>85131</ram:PostcodeCode>
+                    <ram:LineOne>Osterstr. 20</ram:LineOne>
+                    <ram:CityName>Pollenfeld</ram:CityName>
+                    <ram:CountryID>DE</ram:CountryID>
+                </ram:PostalTradeAddress>
+                <ram:SpecifiedLegalOrganization>
+                    <ram:TradingBusinessName>Klaus Wiedenmann</ram:TradingBusinessName>
+                    <ram:ID schemeID="EU">53 906 142 470</ram:ID>
+                </ram:SpecifiedLegalOrganization>
+                <ram:Contact>
+                    <ram:EmailURIID>kw@selbstboss.de</ram:EmailURIID>
+                    <ram:TelephoneUniversalCommunication>
+                        <ram:CompleteNumber>+49 (0)174 186 41 36</ram:CompleteNumber>
+                    </ram:TelephoneUniversalCommunication>
+                </ram:Contact>
+            </ram:SellerTradeParty>
+
+            <!-- Käuferinformationen -->
+            <ram:BuyerTradeParty>
+                <ram:Name>van Gerrevink GmbH</ram:Name>
+                <ram:PostalTradeAddress>
+                    <ram:PostcodeCode>94107</ram:PostcodeCode>
+                    <ram:LineOne>Werksiedlung 27</ram:LineOne>
+                    <ram:CityName>Untergriesbach</ram:CityName>
+                    <ram:CountryID>DE</ram:CountryID>
+                </ram:PostalTradeAddress>
+            </ram:BuyerTradeParty>
+        </ram:ApplicableHeaderTradeAgreement>
+
+        <!-- Zahlungsinformationen -->
+        <ram:ApplicableHeaderTradeSettlement>
+            <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+            <ram:SpecifiedTradeSettlementPaymentMeans>
+                <ram:TypeCode>30</ram:TypeCode>
+                <ram:Information>Überweisung auf IBAN DE80 7215 0000 0054 3485 78</ram:Information>
+            </ram:SpecifiedTradeSettlementPaymentMeans>
+            <ram:ApplicableTradeTax>
+                <ram:TypeCode>VAT</ram:TypeCode>
+                <ram:CategoryCode>S</ram:CategoryCode>
+                <ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
+            </ram:ApplicableTradeTax>
+            <ram:SpecifiedTradeSettlementMonetarySummation>
+                <ram:LineTotalAmount>530.00</ram:LineTotalAmount>
+                <ram:TaxBasisTotalAmount>530.00</ram:TaxBasisTotalAmount>
+                <ram:TaxTotalAmount currencyID="EUR">100.70</ram:TaxTotalAmount>
+                <ram:GrandTotalAmount currencyID="EUR">630.70</ram:GrandTotalAmount>
+            </ram:SpecifiedTradeSettlementMonetarySummation>
+        </ram:ApplicableHeaderTradeSettlement>
+
+        <!-- Rechnungspositionen -->
+        <ram:IncludedSupplyChainTradeLineItem>
+            <ram:SpecifiedTradeProduct>
+                <ram:Name>Chat und Setting-Calls durchgeführt</ram:Name>
+            </ram:SpecifiedTradeProduct>
+            <ram:SpecifiedLineTradeAgreement>
+                <ram:GrossPriceProductTradePrice>
+                    <ram:ChargeAmount>530.00</ram:ChargeAmount>
+                </ram:GrossPriceProductTradePrice>
+            </ram:SpecifiedLineTradeAgreement>
+            <ram:SpecifiedLineTradeSettlement>
+                <ram:ApplicableTradeTax>
+                    <ram:TypeCode>VAT</ram:TypeCode>
+                    <ram:CategoryCode>S</ram:CategoryCode>
+                    <ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
+                </ram:ApplicableTradeTax>
+                <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                    <ram:LineTotalAmount>530.00</ram:LineTotalAmount>
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+            </ram:SpecifiedLineTradeSettlement>
+        </ram:IncludedSupplyChainTradeLineItem>
+    </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>

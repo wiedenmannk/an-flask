@@ -1,9 +1,11 @@
 python3 app.py
 python3 server.py
 python3 tests/pdfAddXml.py
+python3 tests/test_zugferd_validator.py
 
 chmod 775 ps
 
 # run ps in Ubuntu
 ./ps
 ./test for testing zugferd xml
+./test_xsd testing validator zugferd
