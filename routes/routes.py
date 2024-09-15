@@ -23,8 +23,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Setze die Log-Ebene auf DEBUG
 
 
-# TODO entferne das generieren des XML Contents und schaue erst mal ob das PDF generiert wird.
-# TODO umbau dieser Routen /api/save-pdf-and-xml und /api/generate-zugferd. Fraglich ob beide Routen noch gebraucht werden
 @bp.route("/api/generate-zugferd", methods=["POST"])
 def generate_zugferd_pdf() -> Any:
     logger.info("Call api/zugferd")
@@ -111,42 +109,6 @@ def generate_zugferd_pdf() -> Any:
             ),
             200,
         )
-
-    except Exception as e:
-        logger.error("Error processing request: %s", str(e))
-        return jsonify({"error": str(e)}), 500
-
-
-@bp.route("/api/save-pdf-and-xml", methods=["POST"])
-def save_pdf_and_xml() -> Any:
-    logger.info("Call api/save-pdf-and-xml")
-    if request.content_type != "application/json":
-        logger.error("Unsupported Media Type")
-        return jsonify({"error": "Unsupported Media Type"}), 415
-
-    try:
-        data = request.json
-        pdf_base64 = data.get("pdf_content")
-        xml_content = data.get("xml_content")
-
-        if not pdf_base64 or not xml_content:
-            logger.error("Missing pdf_content or xml_content")
-            return jsonify({"error": "Missing pdf_content or xml_content"}), 400
-
-        # Decode and save PDF
-        pdf_data = base64.b64decode(pdf_base64)
-        pdf_output_path = "output_test.pdf"
-        with open(pdf_output_path, "wb") as pdf_file:
-            pdf_file.write(pdf_data)
-        logger.info("PDF saved as %s", pdf_output_path)
-
-        # Save XML
-        xml_output_path = "output_test.xml"
-        with open(xml_output_path, "w", encoding="utf-8") as xml_file:
-            xml_file.write(xml_content)
-        logger.info("XML saved as %s", xml_output_path)
-
-        return jsonify({"message": "PDF and XML saved successfully"}), 200
 
     except Exception as e:
         logger.error("Error processing request: %s", str(e))

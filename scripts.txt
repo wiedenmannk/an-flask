@@ -6,3 +6,4 @@ chmod 775 ps
 
 # run ps in Ubuntu
 ./ps
+./test for testing zugferd xml
