@@ -1,6 +1,6 @@
-from lxml import etree
-import sys
 from pathlib import Path
+import sys
+from lxml import etree
 
 # Füge das Projekt-Root-Verzeichnis zu sys.path hinzu
 root_dir = Path(__file__).parent.parent
@@ -36,10 +36,12 @@ def validate_xml_with_schematron(xml_file, sch_file):
         with open(sch_file, "rb") as sch_f:
             schematron_doc = etree.parse(sch_f)
             schematron = etree.Schematron(schematron_doc)
+        print(f"file geparsed {schematron}")
 
         # Lade das XML-Dokument
         with open(xml_file, "rb") as xml_f:
             xml_doc = etree.parse(xml_f)
+        print(f"xml file geladen {xml_doc}")
 
         # Führe die Schematron-Validierung durch
         if schematron.validate(xml_doc):
@@ -47,7 +49,9 @@ def validate_xml_with_schematron(xml_file, sch_file):
             return True
         else:
             print("Schematron-Validierung fehlgeschlagen.")
-            print(schematron.error_log)
+            print("Fehlerprotokoll:")
+            for error in schematron.error_log:
+                print(f"Zeile {error.line}, Spalte {error.column}: {error.message}")
             return False
 
     except Exception as e:
@@ -55,24 +59,25 @@ def validate_xml_with_schematron(xml_file, sch_file):
         return False
 
 
-xsd_path = root_dir / "zugferd/Schema"
-xsd_path_extended = "EXTENDED"
-xsd_schematron_dir = "Schematron"
-zugferd_schema_extented = (
-    xsd_path_extended
-    / "FACTUR-X_EXTENDED_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd"
-)
-zugferd_schematron_extended = (
-    xsd_path_extended / xsd_schematron_dir / "FACTUR-X_BASIC.sch"
-)
+# Verwende 'Path' für die Pfad-Konstruktion
+xsd_path = root_dir / "zugferd" / "Schema"  # root_dir ist ein Path-Objekt
+xsd_path_extended = xsd_path / "EXTENDED"  # Dies muss auch ein Path-Objekt sein
+xsd_schematron_dir = xsd_path_extended / "Schematron"  # Pfade korrekt zusammensetzen
+
+# Haupt-XSD und Schematron-Datei korrekt referenzieren
+zugferd_schema_extended = xsd_path_extended / "FACTUR-X_EXTENDED.xsd"
+zugferd_schematron_extended = xsd_schematron_dir / "FACTUR-X_EXTENDED.sch"
 
 # Beispielaufruf mit den Pfaden zu deinen Dateien
-xml_file = "xml/comfort_zugferd.xml"
-xsd_file = xsd_path / zugferd_schema_extented  # Haupt-XSD für Extended
-sch_file = xsd_path / zugferd_schematron_extended  # Schematron-Datei für Extended
+# xml_file = root_dir / "tests/xml" / "comfort_zugferd.xml"
+xml_file = root_dir / "tests/xml/zugferd" / "extended.xml"
+xsd_file = zugferd_schema_extended  # XSD-Pfad
+sch_file = zugferd_schematron_extended  # Schematron-Pfad
 
-print(f"extended xsd schema {xsd_file}")
-print(f"extended xsd schematron {sch_file}")
+# Ausgabe der Pfade zum Debuggen
+print(f"Extended XSD schema: {xsd_file}")
+print(f"Extended Schematron: {sch_file}")
+print(f"xml file  {str(xml_file)}")
 
 # Führe XSD-Validierung durch
 validate_xml_with_xsd(xml_file, xsd_file)

@@ -1,0 +1,1 @@
+xmlstarlet val -e -s /home/dev/dev/python/an-flask/zugferd/Schema/EXTENDED/Schematron/FACTUR-X_EXTENDED.sch /home/dev/dev/python/an-flask/tests/xml/zugferd/extended.xml
