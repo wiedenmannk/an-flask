@@ -19,4 +19,4 @@ if [ ! -f "$XML_FILE" ]; then
 fi
 
 # Mustang-CLI-Command ausführen
-java -jar "$CLI_DIR/Mustang-CLI-2.14.0.jar" --no-notices --action validate --source "$XML_FILE"
+java -jar "$CLI_DIR/Mustang-CLI-2.14.0-SNAPSHOT.jar" --no-notices --action validate --source "$XML_FILE"

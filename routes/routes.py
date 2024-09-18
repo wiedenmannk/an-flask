@@ -1,9 +1,6 @@
-import base64
-import io
 import logging
 from typing import Dict, Any
 from flask import Blueprint, jsonify, request
-import fitz  # PyMuPDF
 import psutil
 import sys
 import os

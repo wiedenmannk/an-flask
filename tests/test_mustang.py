@@ -9,7 +9,7 @@ sys.path.append(str(root_dir))
 
 def validate_xml_with_mustang(xml_file):
     # Pfad zum Mustang-CLI JAR-File
-    mustang_cli_jar = root_dir / "cli/Mustang-CLI-2.14.0.jar"
+    mustang_cli_jar = root_dir / "cli/Mustang-CLI-2.14.0-SNAPSHOT.jar"
 
     # Mustang-CLI-Kommando erstellen
     command = [
@@ -23,18 +23,31 @@ def validate_xml_with_mustang(xml_file):
     ]
 
     try:
-        # Ausführung des Kommandos
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
-        print("Validierung erfolgreich!")
+        # Ausführung des Kommandos ohne 'check=True', um nicht in eine Exception zu laufen
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Ausgabe des Mustang-CLI anzeigen
+        if result.returncode == 0:
+            print("Validierung erfolgreich!")
+        else:
+            print(
+                "Validierung fehlgeschlagen. XML ist fehlerhaft, aber das ist erwartbar."
+            )
+
+        # Zeige die normale Ausgabe (stdout)
         print("Ergebnis:")
-        print(result.stdout)  # Ausgabe des Mustang-CLI anzeigen
-    except subprocess.CalledProcessError as e:
-        print(f"Fehler bei der Validierung: {e}")
-        print(f"Fehlerausgabe: {e.stderr}")
+        print(result.stdout)
+
+        # Falls Fehler in stderr sind, zeige sie ebenfalls an
+        if result.stderr:
+            print("Fehlerausgabe:")
+            print(result.stderr)
+
+    except Exception as e:
+        print(f"Unerwarteter Fehler bei der Ausführung: {e}")
 
 
 # Beispiel-XML-Datei
-# xml_file = root_dir / "tests/xml/zugferd/extended.xml"
 xml_file = root_dir / "tests/xml/comfort_zugferd.xml"
 
 # Validierung starten
