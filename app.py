@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 import pikepdf
 from lxml import etree
 from routes.routes import bp as zugferd_route  # Korrekte Importstruktur
+from routes.validator import vbp as validator_route
 
 app = Flask(__name__)
 
@@ -59,6 +60,7 @@ def get_product(product_id):
 
 # Registriere die Routen
 app.register_blueprint(zugferd_route)  # Hier registrierst du den Blueprint direkt
+app.register_blueprint(validator_route)  # Hier registrierst du den Blueprint direkt
 
 if __name__ == "__main__":
     app.run(debug=True)
