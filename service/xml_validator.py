@@ -15,7 +15,7 @@ class XMLValidator:
         formatter = logging.Formatter("%(asctime)s %(levelname)s: %(message)s")
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.DEBUG)  # Set to DEBUG to see all log messages
 
     def validate_xml(self, xml_file):
         command = [
@@ -29,33 +29,33 @@ class XMLValidator:
         ]
 
         try:
-            # Subprocess run without 'check=True', so we handle errors without raising an exception
             result = subprocess.run(command, capture_output=True, text=True)
+
+            output = result.stdout.strip() if result.stdout else "No output generated"
+            message = (
+                result.stderr.strip() if result.stderr else "No error message generated"
+            )
+
+            self.logger.debug(f"Validation output: {output}")  # Log stdout
+            self.logger.debug(f"Validation message: {message}")  # Log stderr
 
             if result.returncode == 0:
                 self.logger.info("Validierung erfolgreich.")
-                return self.parse_output(result.stdout)
+                return {
+                    "status": "success",
+                    "message": "",  # Keine Fehlermeldung bei Erfolg
+                    "output": output,
+                }
             else:
                 self.logger.error("Validierung fehlgeschlagen.")
-                self.logger.error(f"Fehlerausgabe: {result.stderr}")
-                return {
-                    "status": "error",
-                    "message": result.stderr,
-                    "output": result.stdout,  # Include the output in case it's relevant
-                }
+                return {"status": "error", "message": message, "output": output}
         except Exception as e:
             self.logger.error(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
-            return {"status": "error", "message": str(e)}
-
-    def parse_output(self, output):
-        try:
-            # Parst den XML-Teil des Outputs (vereinfachtes Beispiel)
-            validation_result = {"status": "success", "details": output}
-            return validation_result
-        except Exception as e:
-            self.logger.error(f"Fehler beim Parsen der Ausgabe: {e}")
-            return {"status": "error", "message": str(e)}
+            return {"status": "error", "message": str(e), "output": ""}
 
     def validate_to_json(self, xml_file):
         result = self.validate_xml(xml_file)
+        self.logger.debug(
+            f"API Response: {json.dumps(result, indent=4)}"
+        )  # Additional log for API response
         return json.dumps(result, indent=4)
