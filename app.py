@@ -17,6 +17,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     "postgresql://agentsmith:dev@localhost:5432/spielwiese"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True  # Zeigt SQL Statements direkt in der Konsole
 
 # Initialisiere SQLAlchemy
 db.init_app(app)  # Behalte dies für die DB-Initialisierung, aber entferne Migrate
@@ -28,6 +29,9 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler()],
 )
+logging.getLogger("sqlalchemy.engine").setLevel(
+    logging.INFO
+)  # Oder logging.DEBUG für mehr Details
 
 
 def generate_random_number():
