@@ -6,8 +6,21 @@ from lxml import etree
 from routes.routes import bp as zugferd_route  # Korrekte Importstruktur
 from routes.validator import vbp as validator_route
 from routes.backend import be as backend_route
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from model.database import db  # Importiere db
 
 app = Flask(__name__)
+
+# Datenbank-Konfiguration
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql://agentsmith:dev@localhost:5432/spielwiese"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Initialisiere SQLAlchemy
+db.init_app(app)  # Behalte dies für die DB-Initialisierung, aber entferne Migrate
+
 
 # Konfiguriere das Logging nur für die Konsole
 logging.basicConfig(

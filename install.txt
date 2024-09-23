@@ -1,2 +1,4 @@
 pip install Flask
 sudo apt install python3-<MODUL>
+
+pip install flask flask-sqlalchemy flask-migrate
