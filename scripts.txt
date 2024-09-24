@@ -2,6 +2,7 @@ python3 app.py
 python3 server.py
 python3 tests/pdfAddXml.py
 python3 tests/test_zugferd_validator.py
+python3 tests/database/user_peewee.py
 
 chmod 775 ps
 

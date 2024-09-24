@@ -3,3 +3,5 @@ sudo apt install python3-<MODUL>
 
 pip install flask flask-sqlalchemy flask-migrate
 pip install --upgrade snowflake-sqlalchemy
+pip install peewee
+pip install psycopg2-binary

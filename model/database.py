@@ -1,3 +1,10 @@
-from flask_sqlalchemy import SQLAlchemy
+from playhouse.postgres_ext import PostgresqlExtDatabase
 
-db = SQLAlchemy()
+# Datenbankverbindung
+db = PostgresqlExtDatabase(
+    "spielwiese",
+    user="agentsmith",
+    password="dev",
+    host="localhost",
+    port=5432,
+)
