@@ -2,7 +2,6 @@
 import logging
 from flask import Blueprint, jsonify, request
 from model.database import db
-from sqlalchemy import text
 from model.user import User
 from service.db_runner import DbRunner
 
@@ -27,12 +26,17 @@ def register():
     try:
         db.connect()
         # prüfen, ob User bereits existiert
-        user_exist = User.get(User.UserLogin == username)
+        user_exist = User.check_user_exists(username)
         if user_exist:
             return jsonify({"error": "User already exist"}), 400
 
         db_runner = DbRunner(db)
-        user_params = {"UserLogin": username, "UserPassword": password}
+        user_id = User.get_next_user_id()
+        user_params = {
+            "User_ID": user_id,
+            "UserLogin": username,
+            "UserPassword": password,
+        }
         new_user = db_runner.execute_transaction(
             lambda: db_runner.create_record(User, **user_params)
         )
