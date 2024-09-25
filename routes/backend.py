@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-# TODO: Sicherstellen das db als Instanz gebildet wird. Da jeweils pro Instanz ein db.connect und close gemacht werden muss
 @be.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json()
@@ -24,7 +23,6 @@ def register():
         return jsonify({"error": "Invalid data"}), 400
 
     try:
-        db.connect()
         # prüfen, ob User bereits existiert
         user_exist = User.check_user_exists(username)
         if user_exist:
@@ -42,10 +40,7 @@ def register():
         )
         logger.info("Benutzer erfolgreich erstellt", new_user.UserLogin)
 
-        db.close()
         return jsonify({"message": "User registered successfully"}), 201
     except Exception as e:
         # Fehler bei Anlage User
         return jsonify({"error": str(e)}), 500
-    finally:
-        db.close()

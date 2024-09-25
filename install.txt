@@ -5,3 +5,4 @@ pip install flask flask-sqlalchemy flask-migrate
 pip install --upgrade snowflake-sqlalchemy
 pip install peewee
 pip install psycopg2-binary
+pip install peewee[postgres]
